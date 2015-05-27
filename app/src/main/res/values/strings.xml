@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">PharmacyMap</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_pharmacy_list">PharmacyList</string>
+    <string name="show_list">Show List</string>
+    <string name="pharmacy_list">PharmacyList</string>
+    <string name="pharmacy_detail">PharmacyDetails</string>
+    <string name="detail_separator_name">Pharmacy Name:</string>
+    <string name="detail_separator_Address">Pharmacy Address:</string>
+    <string name="detail_separator_phone">Pharmacy Phone:</string>
+    <string name="detail_separator_location">Location info:</string>
+</resources>
