@@ -2,6 +2,7 @@ package com.example.amado.pharmacymap;
 
 import android.content.Intent;
 import android.location.Location;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,10 +70,14 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
         mPharmacies= PharmacyLocations.getPharmacies();
+        DataSource.createDb();
+        Pharmacy dummi = Pharmacy.findById(Pharmacy.class, (long)7);
+        Log.d(TAG, dummi.getName());
         mMap.setInfoWindowAdapter(new MarkerAdapter(getLayoutInflater()));
         for(Pharmacy pharmacy: mPharmacies){
             addMarker(pharmacy);
