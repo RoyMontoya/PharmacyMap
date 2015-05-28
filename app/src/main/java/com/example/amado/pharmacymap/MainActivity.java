@@ -75,9 +75,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
         mPharmacies= PharmacyLocations.getPharmacies();
-        DataSource.createDb();
-        Pharmacy dummi = Pharmacy.findById(Pharmacy.class, (long)7);
-        Log.d(TAG, dummi.getName());
         mMap.setInfoWindowAdapter(new MarkerAdapter(getLayoutInflater()));
         for(Pharmacy pharmacy: mPharmacies){
             addMarker(pharmacy);

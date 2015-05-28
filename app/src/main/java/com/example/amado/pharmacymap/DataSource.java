@@ -1,6 +1,7 @@
 package com.example.amado.pharmacymap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Amado on 27/05/2015.
@@ -30,21 +31,18 @@ public class DataSource {
 
 
     public static void createDb(){
-        for (int i = 0; i < sPharmacies.size(); i++) {
-            Pharmacy pharmacy = sPharmacies.get(i);
-            pharmacy.save();
-        }
+            sPharmacies = createPharmacies();
+            for (Pharmacy pharmacy : sPharmacies) {
+                pharmacy.save();
+            }
+
     }
 
     public static ArrayList<Pharmacy> getPharmaciesFromDataBase(){
-        ArrayList<Pharmacy> Pharmacies = new ArrayList<>();
-        for (int i = 1; i <name.length+1 ; i++) {
-            String in = ""+i;
-            long index = Long.parseLong(in);
-            Pharmacy pharmacy = Pharmacy.findById(Pharmacy.class, index);
-            Pharmacies.add(pharmacy);
+            List<Pharmacy> pharmacies = Pharmacy.listAll(Pharmacy.class);
+        return (ArrayList<Pharmacy>)pharmacies;
         }
-        return Pharmacies;
-    }
+
+
 
 }
