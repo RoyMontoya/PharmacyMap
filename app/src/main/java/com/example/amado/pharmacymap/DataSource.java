@@ -1,5 +1,7 @@
 package com.example.amado.pharmacymap;
 
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 import java.util.List;
 

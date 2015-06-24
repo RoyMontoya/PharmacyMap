@@ -2,7 +2,6 @@ package com.example.amado.pharmacymap;
 
 import android.content.Intent;
 import android.location.Location;
-import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,12 +30,19 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     public static double sUserLongitude;
     public static double sUserLatitude;
+    private ArrayList<Pharmacy> mTest;
     private ArrayList<Pharmacy> mPharmacies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        if(UserDataSource.getCurrentUser() == null){
+            Intent i = new Intent(this, SignInActivity.class);
+            startActivity(i);
+        }
+
 
         MapFragment mapFragment = (MapFragment)getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -74,6 +80,12 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
+        mTest = (ArrayList)ParseDataSource.getPharmaciesFromParse();
+        if(mTest.isEmpty()){
+            Log.d(TAG, "is empty");
+        }else{
+            Log.d(TAG, mTest.get(0).getName());
+        }
         mPharmacies= PharmacyLocations.getPharmacies();
         mMap.setInfoWindowAdapter(new MarkerAdapter(getLayoutInflater()));
         for(Pharmacy pharmacy: mPharmacies){

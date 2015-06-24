@@ -29,6 +29,8 @@ public class PharmacyLocations {
         }
     }
 
+
+
     private static boolean DbHasObjects(){
         if(sPharmacies.isEmpty()){
             return false;

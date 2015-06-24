@@ -5,6 +5,7 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class PharmacyListFragment extends ListFragment {
-
+    private static final String TAG = "PharmacyListFragment";
     private ArrayList<Pharmacy> mPharmacies;
     private PharmacyAdapter mAdapter;
     public static final String EXTRA_POSITION= "position";
@@ -33,8 +34,8 @@ public class PharmacyListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mPharmacies= PharmacyLocations.getPharmacies();
+
         mAdapter = new PharmacyAdapter(mPharmacies);
         setListAdapter(mAdapter);
 

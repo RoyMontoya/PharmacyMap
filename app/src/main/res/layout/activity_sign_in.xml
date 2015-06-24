@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.example.amado.pharmacymap.SignInActivity">
+
+    <TextView
+    android:text="@string/welcome1"
+    android:textSize="@dimen/heading_textsize"
+    android:paddingTop="24dp"
+    android:layout_gravity="center_horizontal"
+    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+    <TextView
+        android:text="@string/welcome2"
+        android:textSize="@dimen/heading_textsize"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/logo_view"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="128dp"
+        android:layout_height="128dp"/>
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

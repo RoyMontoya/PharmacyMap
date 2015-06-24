@@ -9,6 +9,7 @@ public class Pharmacy extends SugarRecord<Pharmacy>{
     String name;
      String Address;
      String phone;
+     String objectId;
      double latitude;
      double longitude;
      double distance;
@@ -26,6 +27,33 @@ public class Pharmacy extends SugarRecord<Pharmacy>{
         this.longitude = longitude;
     }
 
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getName() {
         return name;
@@ -49,10 +77,11 @@ public class Pharmacy extends SugarRecord<Pharmacy>{
 
     public double getDistance() {
         distance = 0;
-
-
         return  calculateDistance();
     }
+
+
+
 
     private double calculateDistance(){
         double lat1 = MainActivity.sUserLatitude;
