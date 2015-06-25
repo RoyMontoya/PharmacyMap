@@ -1,12 +1,16 @@
 package com.example.amado.pharmacymap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -18,11 +22,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks
-, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapClickListener{
+, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapClickListener, ParseDataSource.Listener{
 
     private static final String TAG = "MainActivity";
 
@@ -30,7 +35,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     public static double sUserLongitude;
     public static double sUserLatitude;
-    private ArrayList<Pharmacy> mTest;
     private ArrayList<Pharmacy> mPharmacies;
 
     @Override
@@ -42,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             Intent i = new Intent(this, SignInActivity.class);
             startActivity(i);
         }
+
 
 
         MapFragment mapFragment = (MapFragment)getFragmentManager().findFragmentById(R.id.map);
@@ -76,21 +81,26 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
-        mTest = (ArrayList)ParseDataSource.getPharmaciesFromParse();
-        if(mTest.isEmpty()){
-            Log.d(TAG, "is empty");
+        if(isOnline()){
+            //if is online download the pharmacies and after the callback fillmarkers
+            downloadInfoFromParse();
         }else{
-            Log.d(TAG, mTest.get(0).getName());
+            //if is offline try retrieving from database
+            try {
+                mPharmacies = PharmacyLocations.getPharmacies();
+                fillMarkers(mPharmacies);
+            }catch (Exception e){
+                Log.d(TAG,"download and retrieving info from database failed");
+                Toast.makeText(this, R.string.connection_toast, Toast.LENGTH_LONG)
+                        .show();
+            }
         }
-        mPharmacies= PharmacyLocations.getPharmacies();
-        mMap.setInfoWindowAdapter(new MarkerAdapter(getLayoutInflater()));
-        for(Pharmacy pharmacy: mPharmacies){
-            addMarker(pharmacy);
-        }
+
+
+
     }
 
 
@@ -142,4 +152,43 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     }
 
+    private void fillMarkers(ArrayList<Pharmacy> pharmacies){
+        mMap.setInfoWindowAdapter(new MarkerAdapter(getLayoutInflater()));
+        for(Pharmacy pharmacy: pharmacies){
+            addMarker(pharmacy);
+        }
+    }
+
+    @Override
+    public void onFetchedParsePharmacies(ArrayList<Pharmacy> pharmaciesFromParse) {
+        updateDatabase(pharmaciesFromParse);
+        PharmacyLocations.setPharmacies(pharmaciesFromParse);
+        fillMarkers(pharmaciesFromParse);
+
+    }
+
+    private void updateDatabase(ArrayList<Pharmacy> pharmaciesFromParse) {
+        String databaseName = getString(R.string.database_name);
+        File database = this.getDatabasePath(databaseName);
+        if(database.exists()){
+            database.delete();
+            DataSource.createDb(pharmaciesFromParse);
+        }else{
+            //if it doesn't exist create a new one
+            DataSource.createDb(pharmaciesFromParse);
+        }
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public void downloadInfoFromParse(){
+        ParseDataSource dataSource = new ParseDataSource(this, this);
+        dataSource.downloadPharmaciesFromParse();
+
+    }
 }

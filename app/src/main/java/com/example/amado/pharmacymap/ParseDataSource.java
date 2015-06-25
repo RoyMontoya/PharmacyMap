@@ -1,5 +1,6 @@
 package com.example.amado.pharmacymap;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -22,6 +23,13 @@ public class ParseDataSource {
     private static final String COLUMN_PHARMACY_LATITUDE = "latitude";
     private static final String COLUMN_PHARMACY_LONGITUDE = "longitude";
     private static final String COLUMN_PHARMACY_OBJECT_ID = "objectId";
+    private  Listener mListener;
+    private Context mContext;
+
+    ParseDataSource(Context context, Listener listener){
+        mContext =context;
+        mListener = listener;
+    }
 
 
     public void uploadPharmacyLocations(ArrayList<Pharmacy> pharmacies){
@@ -41,8 +49,8 @@ public class ParseDataSource {
         parsePharmacy.saveInBackground();
     }
 
-    public static List<Pharmacy> getPharmaciesFromParse(){
-        final List<Pharmacy> pharmacies = new ArrayList<>();
+    public void downloadPharmaciesFromParse(){
+        final ArrayList<Pharmacy> pharmacies = new ArrayList<>();
         ParseQuery<ParseObject> pharmaciesQuery = new ParseQuery<ParseObject>(PHARMACY_LOCATION_CLASS);
         pharmaciesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -50,14 +58,16 @@ public class ParseDataSource {
                 if (e == null) {
                     for (ParseObject parseObject : list) {
                         pharmacies.add(ParseToPharmacy(parseObject));
-                        Log.d(TAG, "" + pharmacies.size());
+                    }
+                    if(mListener!= null&&pharmacies.size()>0){
+                        mListener.onFetchedParsePharmacies(pharmacies);
                     }
                 }
 
             }
 
         });
-        return pharmacies;
+
     }
 
     public static Pharmacy ParseToPharmacy(ParseObject object){
@@ -69,7 +79,12 @@ public class ParseDataSource {
         pharmacy.setLongitude(object.getDouble(COLUMN_PHARMACY_LONGITUDE));
         pharmacy.setObjectId(object.getString(COLUMN_PHARMACY_OBJECT_ID));
         return pharmacy;
-
     }
+
+    public interface Listener{
+        public void onFetchedParsePharmacies(ArrayList<Pharmacy> pharmaciesFromParse);
+    }
+
+
 
 }

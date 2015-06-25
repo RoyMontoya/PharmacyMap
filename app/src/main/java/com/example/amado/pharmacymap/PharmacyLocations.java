@@ -12,30 +12,17 @@ public class PharmacyLocations {
 
     public static ArrayList<Pharmacy> sPharmacies;
 
+    public static void setPharmacies(ArrayList<Pharmacy> pharmacies) {
+        sPharmacies = pharmacies;
+    }
+
     public static ArrayList<Pharmacy> getPharmacies() {
         if (sPharmacies == null) {
                 sPharmacies = DataSource.getPharmaciesFromDataBase();
-                if(sPharmacies.isEmpty()) {
-                    Log.d(TAG, "Failed to get data from Database, creating new one");
-                    DataSource.createDb();
-                    sPharmacies = DataSource.getPharmaciesFromDataBase();
-                }else{
-                    Log.d(TAG, "Data fetched from Db");
-                }
             return sPharmacies;
 
         } else {
             return sPharmacies;
-        }
-    }
-
-
-
-    private static boolean DbHasObjects(){
-        if(sPharmacies.isEmpty()){
-            return false;
-        }else{
-            return true;
         }
     }
 

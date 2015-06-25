@@ -15,4 +15,6 @@
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="welcome1">Welcome to</string>
     <string name="welcome2">PharmacyMap!</string>
+    <string name="database_name">pharmacy_infon.db</string>
+    <string name="connection_toast">data unavailable</string>
 </resources>

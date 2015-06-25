@@ -35,7 +35,6 @@ public class PharmacyListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPharmacies= PharmacyLocations.getPharmacies();
-
         mAdapter = new PharmacyAdapter(mPharmacies);
         setListAdapter(mAdapter);
 
