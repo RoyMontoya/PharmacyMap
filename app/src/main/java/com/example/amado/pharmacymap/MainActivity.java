@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        startUpdateService();
         setContentView(R.layout.activity_main);
         if(UserDataSource.getCurrentUser() == null){
             Intent i = new Intent(this, SignInActivity.class);
@@ -57,6 +57,10 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
 
 
+    }
+
+    private void startUpdateService() {
+        updateService.setServiceAlarm(this, true);
     }
 
     @Override
@@ -153,6 +157,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     private void fillMarkers(ArrayList<Pharmacy> pharmacies){
+        Log.d(TAG, "markersUpdated");
         mMap.setInfoWindowAdapter(new MarkerAdapter(getLayoutInflater()));
         for(Pharmacy pharmacy: pharmacies){
             addMarker(pharmacy);
@@ -161,8 +166,10 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     @Override
     public void onFetchedParsePharmacies(ArrayList<Pharmacy> pharmaciesFromParse) {
+        Log.d(TAG, "got pharmacies from parse");
         updateDatabase(pharmaciesFromParse);
         PharmacyLocations.setPharmacies(pharmaciesFromParse);
+        mMap.clear();
         fillMarkers(pharmaciesFromParse);
 
     }

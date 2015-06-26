@@ -23,7 +23,7 @@ public class ParseDataSource {
     private static final String COLUMN_PHARMACY_LATITUDE = "latitude";
     private static final String COLUMN_PHARMACY_LONGITUDE = "longitude";
     private static final String COLUMN_PHARMACY_OBJECT_ID = "objectId";
-    private  Listener mListener;
+    private  static Listener mListener;
     private Context mContext;
 
     ParseDataSource(Context context, Listener listener){
@@ -49,7 +49,7 @@ public class ParseDataSource {
         parsePharmacy.saveInBackground();
     }
 
-    public void downloadPharmaciesFromParse(){
+    public static void downloadPharmaciesFromParse(){
         final ArrayList<Pharmacy> pharmacies = new ArrayList<>();
         ParseQuery<ParseObject> pharmaciesQuery = new ParseQuery<ParseObject>(PHARMACY_LOCATION_CLASS);
         pharmaciesQuery.findInBackground(new FindCallback<ParseObject>() {
